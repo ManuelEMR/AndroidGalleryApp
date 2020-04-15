@@ -1,8 +1,10 @@
 package com.manuelemr.galleyapp.presentation.modules.imagedetail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -34,6 +36,10 @@ class ImageDetailFragment : Fragment(R.layout.fragment_image_detail) {
 
     private fun setupViews() {
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        shareButton.setOnClickListener {
+            shareImage()
+        }
     }
 
     private fun setupBindings() {
@@ -43,6 +49,16 @@ class ImageDetailFragment : Fragment(R.layout.fragment_image_detail) {
             imageView.load(it.fullPicture?: it.croppedPicture)
             title.text = it.author
             cameraType.text = it.camera
+        }
+    }
+
+    private fun shareImage() {
+        viewModel.image.value?.let {
+            ShareCompat.IntentBuilder.from(requireActivity())
+                .setType("text/plain")
+                .setChooserTitle("Share URL")
+                .setText(it.fullPicture)
+                .startChooser();
         }
     }
 }
