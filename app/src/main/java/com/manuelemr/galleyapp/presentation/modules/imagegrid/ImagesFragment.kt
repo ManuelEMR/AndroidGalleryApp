@@ -5,6 +5,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.observe
 import com.manuelemr.galleyapp.R
 import com.manuelemr.galleyapp.data.modules.images.models.ImageData
@@ -56,6 +58,7 @@ class ImagesFragment : Fragment(R.layout.fragment_images) {
         parentFragmentManager.beginTransaction()
             .replace(R.id.container, ImageDetailFragment.newInstance(imageData.id))
             .addToBackStack(ImageDetailFragment::class.java.name)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .commit()
     }
 }
