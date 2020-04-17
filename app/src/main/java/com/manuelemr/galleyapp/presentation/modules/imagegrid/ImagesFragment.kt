@@ -38,19 +38,17 @@ class ImagesFragment : Fragment(R.layout.fragment_images) {
             .also { adapter = it }
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getImages()
+            viewModel.refresh()
         }
     }
 
     private fun setupBindings() {
-        viewModel.getImages()
-
         viewModel.loading.observe(viewLifecycleOwner) {
             swipeRefreshLayout.isRefreshing = it
         }
 
         viewModel.images.observe(viewLifecycleOwner) {
-            adapter?.items = it
+            adapter?.submitList(it)
         }
     }
 

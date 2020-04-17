@@ -1,35 +1,27 @@
 package com.manuelemr.galleyapp.presentation.modules.imagegrid
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.manuelemr.galleyapp.data.modules.images.ImagesRepository
 import com.manuelemr.galleyapp.data.modules.images.models.ImageData
+import com.manuelemr.galleyapp.domain.ImagesDataFactory
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class ImagesViewModel(private val imagesRepository: ImagesRepository) : ViewModel() {
+class ImagesViewModel(private val imagesDataFactory: ImagesDataFactory) : ViewModel() {
+    val loading: LiveData<Boolean> = imagesDataFactory.dataSource.switchMap { it.loading }
+    val images: LiveData<PagedList<ImageData>> by lazy {
+        PagedList.Config.Builder()
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(26)
+            .setPageSize(26)
+            .build()
+            .let { LivePagedListBuilder(imagesDataFactory, it) }
+            .build()
+    }
 
-    private val _images = MutableLiveData<List<ImageData>>()
-    private val _loading = MutableLiveData<Boolean>()
-
-    val images: LiveData<List<ImageData>> = _images
-    val loading: LiveData<Boolean> = _loading
-
-    fun getImages() {
-        viewModelScope.launch {
-            // TODO: Implement pagination
-            _loading.postValue(true)
-            try {
-                imagesRepository.getImages(0)
-                    .let {
-                        _images.postValue(it.pictures)
-                    }
-            } catch(e: HttpException) {
-                e.printStackTrace()
-            }
-            _loading.postValue(false)
-        }
+    fun refresh() {
+        images.value?.dataSource?.invalidate()
     }
 }

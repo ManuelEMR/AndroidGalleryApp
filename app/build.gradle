@@ -50,6 +50,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.androidKTXVersion"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:$rootProject.multidexVersion"
+    implementation "androidx.paging:paging-runtime:$rootProject.pagingVersion"
 
     // Koin for Android
     implementation "org.koin:koin-android:$rootProject.koinVersion"

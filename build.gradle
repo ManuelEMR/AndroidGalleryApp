@@ -41,6 +41,7 @@ ext {
     playServicesVersion = "17.0.0"
     androidKTXVersion = "2.2.0"
     koinVersion = "2.0.1"
+    pagingVersion = "2.1.2"
 
     interceptorVersion = '4.3.1'
     gsonVersion = '2.8.6'
